@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>I DOC VIEW 前台RCE</title>
+    <link href="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/"/>
+    <url>/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="I-DOC-VIEW-前台RCE"><a href="#I-DOC-VIEW-前台RCE" class="headerlink" title="I DOC VIEW 前台RCE"></a>I DOC VIEW 前台RCE</h1><p>I DOC VIEW是一个在线的文档查看器，其中的<code>/html/2word</code>接口因为处理不当，导致可以远程读取任意文件，通过这个接口导致服务器下载恶意的JSP进行解析，从而RCE。</p><h2 id="漏洞影响版本"><a href="#漏洞影响版本" class="headerlink" title="漏洞影响版本"></a>漏洞影响版本</h2><p><code>20231115</code>之前版本</p><h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>先定位到问题接口：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124002943513.png" class="" title="image-20231124002943513"><p>接口里面就一个方法<code>toWord</code>，那么就来看看它做了什么：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124002951105.png" class="" title="image-20231124002951105"><p>前面的内容不是特别紧要，这里有一个去爬取页面的方法，也是唯一使用了<code>url</code>参数的地方：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124002957766.png" class="" title="image-20231124002957766"><p>这里使用了<code>getPage</code>方法来处理<code>obj</code>，而<code>obj</code>又是<code>url</code>来的<code>URL</code>对象，但是疑惑的时文件名只能是<code>index.html</code>所以去看一下这个<code>getWebPage</code>方法：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003004867.png" class="" title="image-20231124003004867"><p>其实到上面这里还好，都是一些写文件的操作，并且写的也是<code>index.html</code>但是下面做的操作就是本此漏洞的关键了，软件本意应该是想做一个比较完善的爬虫，所以接下会调用<code>GrabUtility.searchForNewFilesToGrab</code>方法继续解析文件内容，这里的<code>conn</code>也就是刚才创建的链接：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003010469.png" class="" title="image-20231124003010469"><p>进入到<code>GrabUtility.searchForNewFilesToGrab</code>查看，发现其中的内容就是解析响应值，其中获取<code>link[href]</code>、<code>script[src]</code>、<code>img[src]</code>标签对应的内容然后存进<code>GrabUtility</code>的成员变量<code>filesToGrab</code>中：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003017471.png" class="" title="image-20231124003017471"><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003025552.png" class="" title="image-20231124003025552"><p>然后就到了触发漏洞的操作了，这里读取了<code>filesToGrab</code>的<code>size</code>然后开始尝试挨个链接下载了，这里调用了<code>GetWebPage</code>重载方法，目录还是原来的目录，文件名时自动解析的文件名：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003032209.png" class="" title="image-20231124003032209"><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003039291.png" class="" title="image-20231124003039291"><p>这就好办了，因为程序中只对后缀做了过滤，所以只要我们不是它黑名单的后缀然后再配合<code>目录穿越</code>就行了，然后黑名单是<code>html</code>、<code>htm</code>、<code>php</code>、<code>asp</code>、<code>aspx</code>和<code>net</code>，但是没有<code>jsp</code>，所以只需要写个<code>jsp</code>的🐎就可以了。<br>这里需要注意的是，因为截取<code>/</code>后的内容作为文件名，所以不能使用<code>/</code>进行目录穿越，但是系统是<code>windows</code>上的，所以就可以使用<code>\</code>来代替。<br>那么利用流程就是：首先启动恶意服务器，将服务器的<code>index.html</code>中放入一个<code>href</code>、<code>img</code>或者<code>script</code>定向到<code>jsp</code>马就行了！（这也印证了通告中的<code>诱导</code>下载危险文件)</p><h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>poc我放在了<a href="https://github.com/springkill/idocv_poc">这里</a>，详细分步复现请看下文：</p><p>构造页面：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003048041.png" class="" title="image-20231124003048041"><p><code>python</code>启动简易<code>http</code>，访问！<br>然后被杀（谢谢你火绒：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003055195.png" class="" title="image-20231124003055195"><p>关了火绒（因为服务貌似会有缓存，所以需要换个端口）：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003100746.png" class="" title="image-20231124003100746"><p>测试：</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003109465.png" class="" title="image-20231124003109465"><p>当然最后不要忘记打开火绒哦。</p><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>文件操作是十分敏感的操作，尤其是向服务器中下载文件，同时下载的文件最好也有固定的目录存放并防止目录穿越，开发者已经想到了下载文件的风险，但是却没有将对策做好，导致了本次漏洞。</p><h2 id="彩蛋"><a href="#彩蛋" class="headerlink" title="彩蛋"></a>彩蛋</h2><p>天知道我试了多少次……</p><img src="/2023/11/24/I%20DOC%20VIEW%20%E5%89%8D%E5%8F%B0RCE/image-20231124003114768.png" class="" title="image-20231124003114768">]]></content>
+    
+    
+    <categories>
+      
+      <category>2023_CVE</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>代码审计</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>浅谈JWT安全</title>
     <link href="/2023/11/22/%E6%B5%85%E8%B0%88JWT%E5%AE%89%E5%85%A8/"/>
     <url>/2023/11/22/%E6%B5%85%E8%B0%88JWT%E5%AE%89%E5%85%A8/</url>
