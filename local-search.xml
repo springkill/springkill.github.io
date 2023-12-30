@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</title>
+    <link href="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/"/>
+    <url>/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/</url>
+    
+    <content type="html"><![CDATA[<h1 id="CVE-2023-51467-Apache-OFBiz-Pre-authentication-Remote-Code-Execution-RCE-vulnerability"><a href="#CVE-2023-51467-Apache-OFBiz-Pre-authentication-Remote-Code-Execution-RCE-vulnerability" class="headerlink" title="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability"></a>CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</h1><h2 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h2><p>因为前面爆出的OFBiz漏洞中的权限绕过并没有被修复，所以导致了这次的漏洞，通过外部调用groovy并且绕过黑名单达到RCE。</p><h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>漏洞的位置很简单也很明了：</p><img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703677648017-9c965b63-048d-4fcd-84b9-3483ba12e5f6.png" class=""><p>关键就是我们如何找到一个入口，传入这个expression呢，那么恰好后台有这么个功能可以进行表达式的传入：</p><img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703860971243-0a974dea-3881-4e2c-92ad-4456215d3727.png" class="" title="image.png"><p>查看controller.xml可以知道，这里的类型是一个视图，所以我们直接去看视图的配置：</p><img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703861056964-b99df67d-ba47-4dd6-ad11-118e8558f8ef.png" class="" title="image.png"><p>定位到这么一个文件，去看一下里面的详细信息，接受值的内容如下，后面就是调用shell执行groovy了，就不截图了：</p><img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703861146878-be5b83b6-6c3b-4c36-b5a7-e4b67b6ee6b5.png" class="" title="image.png"><p>最后的执行效果如下：</p><img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703782220217-31942f51-a016-4532-908e-0263a7d1d344.png" class="" title="image.png"><p>其实发现这个漏洞最开始并不是配置文件来的，web界面中有个功能就叫<code>可编程导出</code>，就是这个url，同时参数也是这个参数，通过没有修复的鉴权来绕过登录直接去执行命令。<br>传入的值为：<code>groovyProgram=println+%22calc%22.execute%28%29.text</code>，并没有什么特殊的技术含量，只是执行了execute而已。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>2023_CVE</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>代码审计</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CVE-2022-41678 Apache ActiveMQ Jolokia RCE</title>
     <link href="/2023/12/01/CVE-2022-41678%20Apache%20ActiveMQ%20Jolokia%20RCE/"/>
     <url>/2023/12/01/CVE-2022-41678%20Apache%20ActiveMQ%20Jolokia%20RCE/</url>
