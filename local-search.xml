@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</title>
+    <link href="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/"/>
+    <url>/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/</url>
+    
+    <content type="html"><![CDATA[<h1 id="CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution"><a href="#CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution" class="headerlink" title="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution"></a>(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</h1><h2 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h2><p> Atlassian Confluence 存在模板注入代码执行漏洞，攻击者可构造恶意请求触发模板注入进而造成远程命令执行。</p><h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><p>停止更新的各个版本以及：<br>8.4.0 &lt;&#x3D; Confluence Data Center and Server &lt;&#x3D; 8.4.4<br>8.5.0 &lt;&#x3D; Confluence Data Center and Server &lt;&#x3D; 8.5.3<br>8.6.0 &lt;&#x3D; Confluence Data Center &lt;&#x3D; 8.6.1</p><h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>还是老样子，diff一下代码发现confluence的一些修改，有一个删除了的文件引起注意：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001830674.png" class=""><p>删除了：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001835407.png" class=""><p>ConfluenceStrutsUtil继承自VelocityStrutsUtil：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001841567.png" class=""><p>VelocityStrutsUtil又继承自StrutsUtil，看到这里推测velocity模板注入。<br>具体应该和前几次有几分相似，velocity解析导致的<code>ognl</code>表达式执行，于是可以去看vm文件。<br>再看vm文件的时候，犯了一个很大的错误，我在重置密码这里看了好久，但是始终是没有结果，它是从action里面读取的变量，所以应该不存在漏洞了，通过vm文件进行访问的时候并不能设置这个值。</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001846042.png" class=""><p>又正值年终总结正好很忙，于是就暂且搁置。<br>后来发现GitHub上多了一个项目<a href="https://github.com/Sudistark/patch-diff-CVE-2023-22527">https://github.com/Sudistark/patch-diff-CVE-2023-22527</a>，里面有所有vm的信息，于是就是直接搜一下：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001849425.png" class=""><p>于是我尝试一些其他接口，但是都是一无所获，这期间想让Z3教我，得到的回复是：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002426058.png" class=""><p>最后在<code>text-inline.vm</code>中会调用到findvalue方法从而造成表达式的执行：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001855784.png" class=""><p>试一下经典poc：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001859143.png" class=""><p>在StrutsUtil里面果然是找到了这个内容，太长了分开截：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001903997.png" class=""><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001922941.png" class=""><p>后面就会按照模板定义的走到<code>findvalue</code>：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001946487.png" class=""><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001953026.png" class=""><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002000159.png" class=""><p>到这里就执行了：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002018309.png" class=""><p>然后通过getText方法取值，这里发现已经计算完毕了：</p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002022472.png" class=""><p>那么这也就通过velocity造成了Ognl表达式执行漏洞。</p><h2 id="关于RCE"><a href="#关于RCE" class="headerlink" title="关于RCE"></a>关于RCE</h2><p>这块可是焦头烂额，尝试构造了几个都没成功执行命令（弹计算器），直到今天看到P牛的vulhub更新了，才想起用回显，这里放下vulhub链接，就不照抄了。<br><a href="https://github.com/vulhub/vulhub/tree/master/confluence/CVE-2023-22527">https://github.com/vulhub/vulhub/tree/master/confluence/CVE-2023-22527</a></p><img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002026504.png" class="">]]></content>
+    
+    
+    <categories>
+      
+      <category>2024_CVE</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>代码审计</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</title>
     <link href="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/"/>
     <url>/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/</url>
