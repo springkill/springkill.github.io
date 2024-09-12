@@ -16,39 +16,45 @@
   <meta name="author" content="SpringKill">
   <meta name="keywords" content="">
   
-    <meta name="description" content="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution漏洞描述 Atlassian Confluence 存在模板注入代码执行漏洞，攻击者可构造恶意请求触发模板注入进而造成远程命令执行。 影响版本停止更新的各个版本以及：8.4.0 &lt;&#x3D; Confluence Data Center and Server &lt;&amp;#">
+    <meta name="description" content="某报表模板注入这次公布的漏洞说是SQL注入，实际上是一个模板注入。 在产品中存在一个名为TemplateUtils 的类，这个类用来处理表达式相关的内容。 传进来的表达式会进入render方法进行渲染：   进去看模板参数渲染使用的方法renderParameter4Tpl ，其中一直在调用同名方法render ，最开始传入了一个新的Calculator ：   中间有一个evalRenderAc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution">
-<meta property="og:url" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/index.html">
+<meta property="og:title" content="某报表模板注入">
+<meta property="og:url" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/index.html">
 <meta property="og:site_name" content="SpringKill_春纱">
-<meta property="og:description" content="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution漏洞描述 Atlassian Confluence 存在模板注入代码执行漏洞，攻击者可构造恶意请求触发模板注入进而造成远程命令执行。 影响版本停止更新的各个版本以及：8.4.0 &lt;&#x3D; Confluence Data Center and Server &lt;&amp;#">
+<meta property="og:description" content="某报表模板注入这次公布的漏洞说是SQL注入，实际上是一个模板注入。 在产品中存在一个名为TemplateUtils 的类，这个类用来处理表达式相关的内容。 传进来的表达式会进入render方法进行渲染：   进去看模板参数渲染使用的方法renderParameter4Tpl ，其中一直在调用同名方法render ，最开始传入了一个新的Calculator ：   中间有一个evalRenderAc">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001830674.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001835407.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001841567.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001846042.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001849425.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002426058.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001855784.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001859143.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001903997.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001922941.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001946487.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001953026.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002000159.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002018309.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002022472.png">
-<meta property="og:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002026504.png">
-<meta property="article:published_time" content="2024-01-22T16:15:32.000Z">
-<meta property="article:modified_time" content="2024-01-22T16:26:09.884Z">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723224905849-1726106018720-2.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723225237830.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723232033511.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723225516954.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723225420954.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723230757983.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723230545758.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723231732934.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723233046321.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723233646180.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724002636625.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724002924552.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003555779.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003707923.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003842295.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003943915.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724004715865.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005229688.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005158851.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005341582.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005009251.png">
+<meta property="og:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724013008799.png">
+<meta property="article:published_time" content="2024-07-23T15:50:12.000Z">
+<meta property="article:modified_time" content="2024-09-12T01:54:41.833Z">
 <meta property="article:author" content="SpringKill">
 <meta property="article:tag" content="代码审计">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001830674.png">
+<meta name="twitter:image" content="http://www.springkill.club/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723224905849-1726106018720-2.png">
   
   
   
-  <title>(CVE-2023-22527)Atlassian Confluence - Remote Code Execution - SpringKill_春纱</title>
+  <title>某报表模板注入 - SpringKill_春纱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -241,7 +247,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution"></span>
+            <span id="subtitle" data-typed-text="某报表模板注入"></span>
           
         </div>
 
@@ -252,8 +258,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-23 00:15" pubdate>
-          2024年1月23日 凌晨
+        <time datetime="2024-07-23 23:50" pubdate>
+          2024年7月23日 晚上
         </time>
       </span>
     
@@ -264,7 +270,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          944 字
         
       </span>
     
@@ -275,7 +281,7 @@
         
         
         
-          9 分钟
+          8 分钟
         
       </span>
     
@@ -312,43 +318,75 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</h1>
+            <h1 id="seo-header">某报表模板注入</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution"><a href="#CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution" class="headerlink" title="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution"></a>(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</h1><h2 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h2><p> Atlassian Confluence 存在模板注入代码执行漏洞，攻击者可构造恶意请求触发模板注入进而造成远程命令执行。</p>
-<h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><p>停止更新的各个版本以及：<br>8.4.0 &lt;&#x3D; Confluence Data Center and Server &lt;&#x3D; 8.4.4<br>8.5.0 &lt;&#x3D; Confluence Data Center and Server &lt;&#x3D; 8.5.3<br>8.6.0 &lt;&#x3D; Confluence Data Center &lt;&#x3D; 8.6.1</p>
-<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>还是老样子，diff一下代码发现confluence的一些修改，有一个删除了的文件引起注意：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001830674.png" srcset="/img/loading.gif" lazyload class="">
-<p>删除了：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001835407.png" srcset="/img/loading.gif" lazyload class="">
-<p>ConfluenceStrutsUtil继承自VelocityStrutsUtil：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001841567.png" srcset="/img/loading.gif" lazyload class="">
-<p>VelocityStrutsUtil又继承自StrutsUtil，看到这里推测velocity模板注入。<br>具体应该和前几次有几分相似，velocity解析导致的<code>ognl</code>表达式执行，于是可以去看vm文件。<br>再看vm文件的时候，犯了一个很大的错误，我在重置密码这里看了好久，但是始终是没有结果，它是从action里面读取的变量，所以应该不存在漏洞了，通过vm文件进行访问的时候并不能设置这个值。</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001846042.png" srcset="/img/loading.gif" lazyload class="">
-<p>又正值年终总结正好很忙，于是就暂且搁置。<br>后来发现GitHub上多了一个项目<a target="_blank" rel="noopener" href="https://github.com/Sudistark/patch-diff-CVE-2023-22527">https://github.com/Sudistark/patch-diff-CVE-2023-22527</a>，里面有所有vm的信息，于是就是直接搜一下：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001849425.png" srcset="/img/loading.gif" lazyload class="">
-<p>于是我尝试一些其他接口，但是都是一无所获，这期间想让Z3教我，得到的回复是：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002426058.png" srcset="/img/loading.gif" lazyload class="">
-<p>最后在<code>text-inline.vm</code>中会调用到findvalue方法从而造成表达式的执行：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001855784.png" srcset="/img/loading.gif" lazyload class="">
-<p>试一下经典poc：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001859143.png" srcset="/img/loading.gif" lazyload class="">
-<p>在StrutsUtil里面果然是找到了这个内容，太长了分开截：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001903997.png" srcset="/img/loading.gif" lazyload class="">
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001922941.png" srcset="/img/loading.gif" lazyload class="">
-<p>后面就会按照模板定义的走到<code>findvalue</code>：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001946487.png" srcset="/img/loading.gif" lazyload class="">
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123001953026.png" srcset="/img/loading.gif" lazyload class="">
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002000159.png" srcset="/img/loading.gif" lazyload class="">
-<p>到这里就执行了：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002018309.png" srcset="/img/loading.gif" lazyload class="">
-<p>然后通过getText方法取值，这里发现已经计算完毕了：</p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002022472.png" srcset="/img/loading.gif" lazyload class="">
-<p>那么这也就通过velocity造成了Ognl表达式执行漏洞。</p>
-<h2 id="关于RCE"><a href="#关于RCE" class="headerlink" title="关于RCE"></a>关于RCE</h2><p>这块可是焦头烂额，尝试构造了几个都没成功执行命令（弹计算器），直到今天看到P牛的vulhub更新了，才想起用回显，这里放下vulhub链接，就不照抄了。<br><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/confluence/CVE-2023-22527">https://github.com/vulhub/vulhub/tree/master/confluence/CVE-2023-22527</a></p>
-<img src="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/image-20240123002026504.png" srcset="/img/loading.gif" lazyload class="">
+                <h1 id="某报表模板注入"><a href="#某报表模板注入" class="headerlink" title="某报表模板注入"></a>某报表模板注入</h1><p>这次公布的漏洞说是SQL注入，实际上是一个模板注入。</p>
+<p>在产品中存在一个名为<code>TemplateUtils</code> 的类，这个类用来处理表达式相关的内容。</p>
+<p>传进来的表达式会进入<code>render</code>方法进行渲染：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723224905849-1726106018720-2.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723224905849">
+
+<p>进去看模板参数渲染使用的方法<code>renderParameter4Tpl</code> ，其中一直在调用同名方法<code>render</code> ，最开始传入了一个新的<code>Calculator</code> ：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723225237830.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723225237830">
+
+<p>中间有一个<code>evalRenderAction</code> 指定了<code>RenderAction</code>，其他的信息不太重要，往后看：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723232033511.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723232033511">
+
+<p>进到最后一个<code>renderTpl</code>后看到了解析表达式的位置，通过<code>ParameterProvider.PARAMETERPATTERN</code>进行解析，然后就会获得表达式中的内容。</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723225516954.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723225516954">
+
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723225420954.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723225420954">
+
+<p>经过处理后这里就会取出<code>$&#123;&#125;</code>中的内容，然后送到下面用前面传入的<code>RenderAction</code>进行渲染：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723230757983.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723230757983">
+
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723230545758.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723230545758">
+
+<p>调用<code>var2.render</code>自然也就是前面传进来的<code>evalRenderAction</code> 了：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723231732934.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723231732934">
+
+<p>继续往下，会走到<code>evalString</code> ，在这里，会将传入的内容转换为<code>Expression</code> </p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723233046321.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723233046321">
+
+<p>然后跟入这个<code>eval</code>,发现了下一个<code>eval</code>,这里就是前面的<code>Calculator</code>下的方法了：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240723233646180.png" srcset="/img/loading.gif" lazyload class="" title="image-20240723233646180">
+
+<p>接下来会去调用下一个<code>eval</code> ，这里就是前面表达式的<code>eval</code> ，实际调用的是<code>RelationExpression</code> 父类<code>BinaryExpression</code> 的<code>eval</code> ：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724002636625.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724002636625">
+
+<p>然后就是是调用下一个<code>Node</code> 的<code>eval</code>方法，这里的<code>eval</code>是使用索引进行检测的，实际是获取表达式<code>=</code> 右边的内容，如果是函数的话就是<code>FunctionCall</code>：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724002924552.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724002924552">
+
+<p><code>FunctionCall.eval</code>方法会去调用<code>resolveMethod</code>，这也是这个漏洞的关键：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003555779.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724003555779">
+
+<p><code>resolveMethod</code> 最终会获取一个命名空间然后调用<code>getMethod</code> ：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003707923.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724003707923">
+
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003842295.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724003842295">
+
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724003943915.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724003943915">
+
+<p>到了函数调用，也就是漏洞发生的地方，存在<code>getMethod</code> 相关的实现类中<code>DefaultNameSpace</code> 类的<code>getMethod</code> 这里通过传入的内容去加载类：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724004715865.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>实际会去调用<code>com.fr.function.xxx</code>,这个包里面有很多函数可以调，返回后去调用<code>evalExpression</code> ：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005229688.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724005229688">
+
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005158851.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724005158851">
+
+<p>网传为<code>SQL</code>，看下<code>SQL</code> 类，应该不用多说了吧：</p>
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005341582.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724005341582">
+
+<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724005009251.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724005009251">
+
+<p>至于入口：<img src="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/image-20240724013008799.png" srcset="/img/loading.gif" lazyload class="" title="image-20240724013008799"></p>
+<p>其实可玩性还是挺高的，也不一定非要用SQL的形式去做POC来检测。</p>
+<p>现已加入豪华检测套餐：</p>
+
+
 
                 
               </div>
@@ -367,7 +405,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/2024-CVE/" class="category-chain-item">2024_CVE</a>
+  <a href="/categories/2024-VULN/" class="category-chain-item">2024_VULN</a>
   
   
 
@@ -394,8 +432,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</div>
-      <div>http://www.springkill.club/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/</div>
+      <div>某报表模板注入</div>
+      <div>http://www.springkill.club/2024/07/23/某报表模板注入/</div>
     </div>
     <div class="license-meta">
       
@@ -407,7 +445,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月23日</div>
+          <div>2024年7月23日</div>
         </div>
       
       
@@ -439,9 +477,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/07/23/%E6%9F%90%E6%8A%A5%E8%A1%A8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/" title="某报表模板注入">
+                      <a href="/2024/09/12/%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%E6%B1%87%E6%80%BB/" title="修复建议汇总">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">某报表模板注入</span>
+                        <span class="hidden-mobile">修复建议汇总</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -449,8 +487,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/" title="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability">
-                        <span class="hidden-mobile">CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</span>
+                      <a href="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/" title="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution">
+                        <span class="hidden-mobile">(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
