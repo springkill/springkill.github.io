@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>KVM使用和Winapps无缝使用Win程序</title>
+    <link href="/2024/10/21/KVM%E4%BD%BF%E7%94%A8%E5%92%8CWinapps%E6%97%A0%E7%BC%9D%E4%BD%BF%E7%94%A8Win%E7%A8%8B%E5%BA%8F/"/>
+    <url>/2024/10/21/KVM%E4%BD%BF%E7%94%A8%E5%92%8CWinapps%E6%97%A0%E7%BC%9D%E4%BD%BF%E7%94%A8Win%E7%A8%8B%E5%BA%8F/</url>
+    
+    <content type="html"><![CDATA[<h1 id="KVM使用和Winapps无缝使用Win程序"><a href="#KVM使用和Winapps无缝使用Win程序" class="headerlink" title="KVM使用和Winapps无缝使用Win程序"></a>KVM使用和Winapps无缝使用Win程序</h1><p>导入windows镜像：</p><p>首先用vmware导出vof文件，并转换磁盘镜像：</p><p><code>sudo qemu-img convert -p -f vmdk -O qcow2 Test-disk1.vmdk Test-disk1.qcow2</code></p><p>因为在vmware中，windows默认通过uefi启动，所以要更改启动模式：</p><p><code>sudo pacman -S edk2-ovmf</code></p><p>然后复制文件：</p><p><code>sudo mkdir -p /var/lib/libvirt/qemu/nvram</code></p><p><code>sudo cp /usr/share/ovmf/x64/OVMF_VARS.fd /var/lib/libvirt/qemu/nvram/RDPWindows_VARS.fd</code></p><p>修改<code>引导选项</code> 的<code>xml</code>的<code>os</code> 字段：</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">os</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">type</span> <span class="hljs-attr">arch</span>=<span class="hljs-string">&quot;x86_64&quot;</span> <span class="hljs-attr">machine</span>=<span class="hljs-string">&quot;pc-q35-9.1&quot;</span>&gt;</span>hvm<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">loader</span> <span class="hljs-attr">readonly</span>=<span class="hljs-string">&quot;yes&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;pflash&quot;</span>&gt;</span>/usr/share/ovmf/x64/OVMF_CODE.fd<span class="hljs-tag">&lt;/<span class="hljs-name">loader</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">nvram</span>&gt;</span>/var/lib/libvirt/qemu/nvram/RDPWindows_VARS.fd<span class="hljs-tag">&lt;/<span class="hljs-name">nvram</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">bootmenu</span> <span class="hljs-attr">enable</span>=<span class="hljs-string">&quot;no&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">os</span>&gt;</span><br></code></pre></td></tr></table></figure><p>然后就可以启动了。</p><h2 id="后准备"><a href="#后准备" class="headerlink" title="后准备"></a>后准备</h2><p>为了更好地使用，需要做一些后准备。</p><p>进入应用卸载<code>vmtools</code>。</p><p>安装<a href="https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe">Spice Guest Tools</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>随笔</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>问题记录</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>修复建议汇总</title>
     <link href="/2024/09/12/%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%E6%B1%87%E6%80%BB/"/>
     <url>/2024/09/12/%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%E6%B1%87%E6%80%BB/</url>

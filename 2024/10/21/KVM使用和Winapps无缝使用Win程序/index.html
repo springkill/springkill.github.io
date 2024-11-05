@@ -16,28 +16,22 @@
   <meta name="author" content="SpringKill">
   <meta name="keywords" content="">
   
-    <meta name="description" content="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability漏洞描述因为前面爆出的OFBiz漏洞中的权限绕过并没有被修复，所以导致了这次的漏洞，通过外部调用groovy并且绕过黑名单达到RCE。 漏洞分析漏洞的位置很简单也很明了：  关键就是我们如何找到一个入口，传入这个expre">
+    <meta name="description" content="KVM使用和Winapps无缝使用Win程序导入windows镜像： 首先用vmware导出vof文件，并转换磁盘镜像： sudo qemu-img convert -p -f vmdk -O qcow2 Test-disk1.vmdk Test-disk1.qcow2	 因为在vmware中，windows默认通过uefi启动，所以要更改启动模式： sudo pacman -S edk2-ovm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability">
-<meta property="og:url" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/index.html">
+<meta property="og:title" content="KVM使用和Winapps无缝使用Win程序">
+<meta property="og:url" content="http://www.springkill.club/2024/10/21/KVM%E4%BD%BF%E7%94%A8%E5%92%8CWinapps%E6%97%A0%E7%BC%9D%E4%BD%BF%E7%94%A8Win%E7%A8%8B%E5%BA%8F/index.html">
 <meta property="og:site_name" content="SpringKill_春纱">
-<meta property="og:description" content="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability漏洞描述因为前面爆出的OFBiz漏洞中的权限绕过并没有被修复，所以导致了这次的漏洞，通过外部调用groovy并且绕过黑名单达到RCE。 漏洞分析漏洞的位置很简单也很明了：  关键就是我们如何找到一个入口，传入这个expre">
+<meta property="og:description" content="KVM使用和Winapps无缝使用Win程序导入windows镜像： 首先用vmware导出vof文件，并转换磁盘镜像： sudo qemu-img convert -p -f vmdk -O qcow2 Test-disk1.vmdk Test-disk1.qcow2	 因为在vmware中，windows默认通过uefi启动，所以要更改启动模式： sudo pacman -S edk2-ovm">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703677648017-9c965b63-048d-4fcd-84b9-3483ba12e5f6.png">
-<meta property="og:image" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703860971243-0a974dea-3881-4e2c-92ad-4456215d3727.png">
-<meta property="og:image" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703861056964-b99df67d-ba47-4dd6-ad11-118e8558f8ef.png">
-<meta property="og:image" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703861146878-be5b83b6-6c3b-4c36-b5a7-e4b67b6ee6b5.png">
-<meta property="og:image" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703782220217-31942f51-a016-4532-908e-0263a7d1d344.png">
-<meta property="article:published_time" content="2023-12-30T13:38:48.000Z">
-<meta property="article:modified_time" content="2023-12-30T14:03:40.021Z">
+<meta property="article:published_time" content="2024-10-21T14:37:01.000Z">
+<meta property="article:modified_time" content="2024-10-21T16:26:49.165Z">
 <meta property="article:author" content="SpringKill">
-<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="问题记录">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://www.springkill.club/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703677648017-9c965b63-048d-4fcd-84b9-3483ba12e5f6.png">
   
   
   
-  <title>CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability - SpringKill_春纱</title>
+  <title>KVM使用和Winapps无缝使用Win程序 - SpringKill_春纱</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -242,7 +236,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability"></span>
+            <span id="subtitle" data-typed-text="KVM使用和Winapps无缝使用Win程序"></span>
           
         </div>
 
@@ -253,8 +247,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-30 21:38" pubdate>
-          2023年12月30日 晚上
+        <time datetime="2024-10-21 22:37" pubdate>
+          2024年10月21日 晚上
         </time>
       </span>
     
@@ -265,7 +259,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          499 字
+          716 字
         
       </span>
     
@@ -276,7 +270,7 @@
         
         
         
-          5 分钟
+          6 分钟
         
       </span>
     
@@ -313,23 +307,26 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</h1>
+            <h1 id="seo-header">KVM使用和Winapps无缝使用Win程序</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="CVE-2023-51467-Apache-OFBiz-Pre-authentication-Remote-Code-Execution-RCE-vulnerability"><a href="#CVE-2023-51467-Apache-OFBiz-Pre-authentication-Remote-Code-Execution-RCE-vulnerability" class="headerlink" title="CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability"></a>CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</h1><h2 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h2><p>因为前面爆出的OFBiz漏洞中的权限绕过并没有被修复，所以导致了这次的漏洞，通过外部调用groovy并且绕过黑名单达到RCE。</p>
-<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>漏洞的位置很简单也很明了：</p>
-<img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703677648017-9c965b63-048d-4fcd-84b9-3483ba12e5f6.png" srcset="/img/loading.gif" lazyload class="">
-<p>关键就是我们如何找到一个入口，传入这个expression呢，那么恰好后台有这么个功能可以进行表达式的传入：</p>
-<img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703860971243-0a974dea-3881-4e2c-92ad-4456215d3727.png" srcset="/img/loading.gif" lazyload class="" title="image.png">
-<p>查看controller.xml可以知道，这里的类型是一个视图，所以我们直接去看视图的配置：</p>
-<img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703861056964-b99df67d-ba47-4dd6-ad11-118e8558f8ef.png" srcset="/img/loading.gif" lazyload class="" title="image.png">
-<p>定位到这么一个文件，去看一下里面的详细信息，接受值的内容如下，后面就是调用shell执行groovy了，就不截图了：</p>
-<img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703861146878-be5b83b6-6c3b-4c36-b5a7-e4b67b6ee6b5.png" srcset="/img/loading.gif" lazyload class="" title="image.png">
-<p>最后的执行效果如下：</p>
-<img src="/2023/12/30/CVE-2023-51467%20%20Apache%20OFBiz_%20Pre-authentication%20Remote%20Code%20Execution%20(RCE)%20vulnerability/1703782220217-31942f51-a016-4532-908e-0263a7d1d344.png" srcset="/img/loading.gif" lazyload class="" title="image.png">
-<p>其实发现这个漏洞最开始并不是配置文件来的，web界面中有个功能就叫<code>可编程导出</code>，就是这个url，同时参数也是这个参数，通过没有修复的鉴权来绕过登录直接去执行命令。<br>传入的值为：<code>groovyProgram=println+%22calc%22.execute%28%29.text</code>，并没有什么特殊的技术含量，只是执行了execute而已。</p>
+                <h1 id="KVM使用和Winapps无缝使用Win程序"><a href="#KVM使用和Winapps无缝使用Win程序" class="headerlink" title="KVM使用和Winapps无缝使用Win程序"></a>KVM使用和Winapps无缝使用Win程序</h1><p>导入windows镜像：</p>
+<p>首先用vmware导出vof文件，并转换磁盘镜像：</p>
+<p><code>sudo qemu-img convert -p -f vmdk -O qcow2 Test-disk1.vmdk Test-disk1.qcow2</code>	</p>
+<p>因为在vmware中，windows默认通过uefi启动，所以要更改启动模式：</p>
+<p><code>sudo pacman -S edk2-ovmf</code></p>
+<p>然后复制文件：</p>
+<p><code>sudo mkdir -p /var/lib/libvirt/qemu/nvram</code></p>
+<p><code>sudo cp /usr/share/ovmf/x64/OVMF_VARS.fd /var/lib/libvirt/qemu/nvram/RDPWindows_VARS.fd</code></p>
+<p>修改<code>引导选项</code> 的<code>xml</code>的<code>os</code> 字段：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">os</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">type</span> <span class="hljs-attr">arch</span>=<span class="hljs-string">&quot;x86_64&quot;</span> <span class="hljs-attr">machine</span>=<span class="hljs-string">&quot;pc-q35-9.1&quot;</span>&gt;</span>hvm<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">loader</span> <span class="hljs-attr">readonly</span>=<span class="hljs-string">&quot;yes&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;pflash&quot;</span>&gt;</span>/usr/share/ovmf/x64/OVMF_CODE.fd<span class="hljs-tag">&lt;/<span class="hljs-name">loader</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">nvram</span>&gt;</span>/var/lib/libvirt/qemu/nvram/RDPWindows_VARS.fd<span class="hljs-tag">&lt;/<span class="hljs-name">nvram</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">bootmenu</span> <span class="hljs-attr">enable</span>=<span class="hljs-string">&quot;no&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">os</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后就可以启动了。</p>
+<h2 id="后准备"><a href="#后准备" class="headerlink" title="后准备"></a>后准备</h2><p>为了更好地使用，需要做一些后准备。</p>
+<p>进入应用卸载<code>vmtools</code>。</p>
+<p>安装<a target="_blank" rel="noopener" href="https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe">Spice Guest Tools</a></p>
 
                 
               </div>
@@ -348,7 +345,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/2023-CVE/" class="category-chain-item">2023_CVE</a>
+  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
   
   
 
@@ -363,7 +360,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="print-no-link">#代码审计</a>
+        <a href="/tags/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="print-no-link">#问题记录</a>
       
     </div>
   
@@ -375,8 +372,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CVE-2023-51467 Apache OFBiz: Pre-authentication Remote Code Execution (RCE) vulnerability</div>
-      <div>http://www.springkill.club/2023/12/30/CVE-2023-51467  Apache OFBiz_ Pre-authentication Remote Code Execution (RCE) vulnerability/</div>
+      <div>KVM使用和Winapps无缝使用Win程序</div>
+      <div>http://www.springkill.club/2024/10/21/KVM使用和Winapps无缝使用Win程序/</div>
     </div>
     <div class="license-meta">
       
@@ -388,7 +385,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月30日</div>
+          <div>2024年10月21日</div>
         </div>
       
       
@@ -420,18 +417,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/01/23/CVE-2023-22527-Atlassian-Confluence-Remote-Code-Execution/" title="(CVE-2023-22527)Atlassian Confluence - Remote Code Execution">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">(CVE-2023-22527)Atlassian Confluence - Remote Code Execution</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/01/CVE-2022-41678%20Apache%20ActiveMQ%20Jolokia%20RCE/" title="CVE-2022-41678 Apache ActiveMQ Jolokia RCE">
-                        <span class="hidden-mobile">CVE-2022-41678 Apache ActiveMQ Jolokia RCE</span>
+                      <a href="/2024/09/12/%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE%E6%B1%87%E6%80%BB/" title="修复建议汇总">
+                        <span class="hidden-mobile">修复建议汇总</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
